@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible problem in WorkBae
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach real client chats, phone numbers, or confidential work logs. Use fictional sample content."
+  - type: input
+    id: version
+    attributes:
+      label: WorkBae version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac model
+      placeholder: "macOS 15.1, MacBook Air M2"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the result and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic or anonymized chat content only.
+    validations:
+      required: true
+  - type: dropdown
+    id: ai
+    attributes:
+      label: Was Local AI enabled?
+      options: [No, Yes, Not sure]
+    validations:
+      required: true

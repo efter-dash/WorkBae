@@ -1,0 +1,19 @@
+.DS_Store
+
+# Local build artifacts
+outputs/
+work/
+DerivedData/
+*.xcuserstate
+
+# Private data and local logs
+_chat.txt
+*WhatsApp Chat*.txt
+*.log
+.env
+.env.*
+
+# Editor settings
+.vscode/
+.idea/
+*.swp

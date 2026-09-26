@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate source
+        run: |
+          node --check src/app.js
+          plutil -lint macos/Info.plist
+      - name: Build and package
+        run: |
+          chmod +x scripts/*.command
+          ./scripts/package-release.command
+      - name: Verify universal binary
+        run: |
+          codesign --verify --deep --strict outputs/WorkBae.app
+          lipo outputs/WorkBae.app/Contents/MacOS/WorkBae -verify_arch arm64 x86_64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WorkBae-macOS
+          path: outputs/WorkBae-macOS-*.zip
+          if-no-files-found: error

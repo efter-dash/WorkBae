@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest a focused improvement to WorkBae
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: "Please keep proposals compatible with WorkBae's local-first privacy model."
+  - type: textarea
+    id: need
+    attributes:
+      label: What work-log problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Suggested experience
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy considerations
+      description: Would this require new files, permissions, network access, or third-party services?

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>WorkBae</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="classic-menubar"><strong>WorkBae</strong><span>File</span><span>Edit</span><span>View</span><span>Log</span><span>Help</span><em>PRIVATE DESKTOP EDITION · 2001</em></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="traffic-space"></div>
+      <div class="brand">
+        <div class="brand-mark"><img src="workbae-logo.jpg" alt="WorkBae W" /></div>
+        <div><strong>WorkBae</strong><span>Your daily contribution log</span></div>
+      </div>
+
+      <button class="primary full" id="importButton">＋ Import client chat</button>
+      <input type="file" id="fileInput" accept=".txt,text/plain" hidden multiple />
+
+      <nav class="nav-block">
+        <button class="nav-item active" data-view="today"><span>⌁</span> Daily log</button>
+        <button class="nav-item" data-view="history"><span>◫</span> Saved days</button>
+      </nav>
+
+      <div class="section-label"><span>Clients</span><span id="clientCount">0</span></div>
+      <div id="clientList" class="client-list"></div>
+
+      <div class="sidebar-bottom">
+        <button class="ghost full" id="pasteButton">Paste conversation text</button>
+        <button class="whatsapp full" id="openWhatsApp"><span>◉</span> Open WhatsApp</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">PRIVATE · ON THIS MAC</div>
+          <h1>Daily work log</h1>
+        </div>
+        <div class="top-actions">
+          <label class="date-control"><span>Date</span><input id="datePicker" type="date" /></label>
+          <button class="ghost" id="aiSetupButton"><span class="status-dot" id="topAiDot"></span> Local AI</button>
+          <button class="ghost" id="settingsButton">My names</button>
+          <button class="primary" id="saveDay">Save day</button>
+        </div>
+      </header>
+
+      <section id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">↗</div>
+        <h2>Bring in your first client conversation</h2>
+        <p>Export a WhatsApp chat without media, then import its text file here. Your chat stays on this Mac.</p>
+        <button class="primary" id="emptyImport">Choose WhatsApp export</button>
+        <div class="privacy-note">No password · No cloud upload · No silent scraping</div>
+      </section>
+
+      <section id="workspace">
+        <div class="stats-grid">
+          <article class="stat"><span>Your contributions</span><strong id="suggestedCount">0</strong><small>formatted from selected date</small></article>
+          <article class="stat"><span>Client threads</span><strong id="threadCount">0</strong><small>with activity</small></article>
+          <article class="stat accent"><span>Status</span><strong id="dayStatus">Draft</strong><small id="savedTime">Review before saving</small></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel log-panel">
+            <div class="panel-head">
+              <div><span class="kicker">MY CONTRIBUTIONS</span><h2 id="logTitle">Today’s activity</h2></div>
+              <button class="icon-button" id="addManual" title="Add an entry">＋</button>
+            </div>
+            <div id="logEntries" class="log-entries"></div>
+            <div id="noEntries" class="no-entries">
+              <strong>No work activity found for this date.</strong>
+              <span>Try another date, import a newer export, or add an entry manually.</span>
+            </div>
+          </section>
+
+          <aside class="right-column">
+            <section class="panel ai-panel">
+              <div class="ai-title-row"><div><span class="kicker">LOCAL INTELLIGENCE</span><h2>Bangla + English → Contribution log</h2></div><span class="ai-chip" id="aiModelChip">QWEN3 · 1.7B</span></div>
+              <p>Translate mixed-language updates and rewrite them as concise, professional contributions. Chat content stays on this Mac.</p>
+              <button class="ai-run" id="runLocalAi"><span>✦</span> Translate &amp; Summarize This Day</button>
+              <div class="ai-status" id="aiStatus">Rule-based log is currently shown.</div>
+            </section>
+            <section class="panel source-panel">
+              <div class="panel-head compact"><div><span class="kicker">SOURCE</span><h2>Conversation activity</h2></div></div>
+              <div id="sourceActivity" class="source-activity"></div>
+            </section>
+            <section class="panel export-panel">
+              <span class="kicker">HANDOVER</span>
+              <h2 id="exportTitle">Export the day</h2>
+              <p id="exportDescription">Share the selected day without exposing the full chat.</p>
+              <div class="export-scope" role="group" aria-label="Export period">
+                <button class="scope-button active" data-scope="day">Day</button>
+                <button class="scope-button" data-scope="month">Month</button>
+              </div>
+              <div class="export-actions">
+                <button class="ghost" id="exportMarkdown">Markdown</button>
+                <button class="ghost" id="exportCsv">CSV</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="pasteModal">
+    <div class="modal">
+      <div class="modal-head"><div><span class="kicker">QUICK IMPORT</span><h2>Paste conversation text</h2></div><button class="icon-button close-modal">×</button></div>
+      <label>Client or project name<input id="pasteClient" type="text" placeholder="e.g. Acme launch campaign" /></label>
+      <label>Conversation text<textarea id="pasteText" rows="12" placeholder="Paste copied WhatsApp messages or exported chat text…"></textarea></label>
+      <div class="modal-actions"><button class="ghost close-modal">Cancel</button><button class="primary" id="processPaste">Scan conversation</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="settingsModal">
+    <div class="modal small">
+      <div class="modal-head"><div><span class="kicker">IDENTITY</span><h2>Which messages are yours?</h2></div><button class="icon-button close-settings">×</button></div>
+      <p class="modal-copy">Add the names that appear beside your messages in exports. Separate multiple names with commas.</p>
+      <label>My WhatsApp names<input id="myNames" type="text" placeholder="e.g. Your Name, You" /></label>
+      <div class="modal-actions"><button class="ghost close-settings">Cancel</button><button class="primary" id="saveSettings">Save names</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="aiModal">
+    <div class="modal small ai-setup-modal">
+      <div class="modal-head"><div><span class="kicker">LOCAL AI SETUP</span><h2>Connect WorkBae to Ollama</h2></div><button class="icon-button close-ai-modal">×</button></div>
+      <div class="setup-steps">
+        <div><b>1</b><span>Install and open the Ollama app for macOS.</span></div>
+        <div><b>2</b><span>Open Terminal once and run: <code>ollama run qwen3:1.7b</code></span></div>
+        <div><b>3</b><span>Return here and check the connection.</span></div>
+      </div>
+      <label>Local model<input id="aiModel" type="text" value="qwen3:1.7b" /></label>
+      <p class="modal-copy">Optimized for your 8 GB M2 MacBook Air. WorkBae unloads the model immediately after each summary.</p>
+      <div class="connection-result" id="connectionResult"><span class="status-dot"></span> Not checked yet</div>
+      <div class="modal-actions"><button class="ghost close-ai-modal">Close</button><button class="primary" id="checkAiConnection">Check connection</button><button class="primary" id="saveAiSettings">Save</button></div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
